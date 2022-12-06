@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
+//TODO: add reference to FileDataHandler
 
 public class GameManager : MonoBehaviour
 {
@@ -44,8 +44,14 @@ public class GameManager : MonoBehaviour
     public int _score;
 
 
+    //TODO: could it be an idea to make a GameData/GameProfile a simple class with a name and a score or more scores. 
+    //and then save the GameProfile object to a json. 
+
+
     void Start()
     {
+
+        //TODO: LoadGame() from File data handler. 
         countdownTime = 30;
         DisplayTime(countdownTime);
         Spawn();
@@ -105,7 +111,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.Log("Countdown is over.");
-            //switch to quit scene. 
+            //switch to quit scene. with the quit(). 
         }
     }
 
@@ -148,6 +154,11 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+
+    //TODO: add a quit method to change the scene. then the SaveGame() can be called inside here. 
+    //TODO: inside the quit() will be saveGame() from the FileDataHandler. 
+
 
     private void DisplayTime(float timeToDisplay)
     {
