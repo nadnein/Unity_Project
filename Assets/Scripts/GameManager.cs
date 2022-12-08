@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
     public SceneLoader _loader;
 
 
-    // Text in the UI.
+    // Text in the UI.  
     [SerializeField] public TMP_Text scoreText, countdownText;
 
     // Reaction time in milliseconds. CountdownTime in seconds. 
@@ -42,6 +42,9 @@ public class GameManager : MonoBehaviour
 
     // the score 
     public int _score;
+
+    // penalty 
+    public int penalty; 
 
 
     //TODO: could it be an idea to make a GameData/GameProfile a simple class with a name and a score or more scores. 
@@ -54,6 +57,7 @@ public class GameManager : MonoBehaviour
         //TODO: LoadGame() from File data handler. 
         countdownTime = 30;
         DisplayTime(countdownTime);
+        penalty = 0;
         Spawn();
     }
 
@@ -104,6 +108,13 @@ public class GameManager : MonoBehaviour
                             Spawn();
                         }
 
+                    }
+                    else if (_inputs[i].IsMismatch(_target))
+                    {
+                        _inputs[i].ResetInput();
+                        penalty += 1;
+                        Debug.Log("Current Penalty is:" + penalty);
+                        
                     }
                 }
             }
