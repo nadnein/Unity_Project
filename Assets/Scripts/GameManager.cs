@@ -42,6 +42,9 @@ public class GameManager : MonoBehaviour
     // the score 
     public int _score;
 
+    // penalty 
+    public int penalty; 
+
 
     // the playerobject. 
     public GameProfile _player;
@@ -55,6 +58,7 @@ public class GameManager : MonoBehaviour
     {
         InitialisePlayer();
         DisplayTime(countdownTime);
+        penalty = 0;
         Spawn();
     }
 
@@ -105,6 +109,13 @@ public class GameManager : MonoBehaviour
                             Spawn();
                         }
 
+                    }
+                    else if (_inputs[i].IsMismatch(_target))
+                    {
+                        _inputs[i].ResetInput();
+                        penalty += 1;
+                        Debug.Log("Current Penalty is:" + penalty);
+                        
                     }
                 }
             }
