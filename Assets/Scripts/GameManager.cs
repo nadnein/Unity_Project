@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-//TODO: add reference to FileDataHandler
+
 
 public class GameManager : MonoBehaviour
 {
@@ -33,26 +33,27 @@ public class GameManager : MonoBehaviour
     // Loader to switch between scenes (animal environments)
     public SceneLoader _loader;
 
-
     // Text in the UI.
-    [SerializeField] public TMP_Text scoreText, countdownText;
+    public TMP_Text scoreText, countdownText;
 
     // Reaction time in milliseconds. CountdownTime in seconds. 
-    public float reactionTime, countdownTime;
+    public float reactionTime, countdownTime = 30;
 
     // the score 
     public int _score;
 
 
-    //TODO: could it be an idea to make a GameData/GameProfile a simple class with a name and a score or more scores. 
-    //and then save the GameProfile object to a json. 
+    // the playerobject. 
+    public GameProfile _player;
+
+    public InputField _nameInput;
+
+    public FileDataHandler dataHandler;
 
 
     void Start()
     {
-
-        //TODO: LoadGame() from File data handler. 
-        countdownTime = 30;
+        InitialisePlayer();
         DisplayTime(countdownTime);
         Spawn();
     }
@@ -110,8 +111,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            QuitGame();
             Debug.Log("Countdown is over.");
-            //switch to quit scene. with the quit(). 
         }
     }
 
@@ -155,9 +156,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-    //TODO: add a quit method to change the scene. then the SaveGame() can be called inside here. 
-    //TODO: inside the quit() will be saveGame() from the FileDataHandler. 
+    private void QuitGame()
+    {
+        dataHandler.WriteToFile(_player);
+        _loader.Invoke("LoadQuitScene", 1f);
+    }
 
 
     private void DisplayTime(float timeToDisplay)
@@ -173,5 +176,24 @@ public class GameManager : MonoBehaviour
         _score = score;
         scoreText.text = score.ToString();
     }
+
+    private void InitialisePlayer()
+    {
+        // check if inputfield is not empty and enter. 
+        if (Input.GetKeyUp(KeyCode.Return) && !(_nameInput.Equals("")))
+        {
+            _loader.Invoke("LoadMenuScene", 1f);
+            _player = new GameProfile(name);
+        }
+        else
+        {
+
+        }
+
+        // TODO: if player chooses a saved profile --> LoadGame()
+        // TODO: else make a new profile from inputfield name. 
+
+    }
+
 
 }
