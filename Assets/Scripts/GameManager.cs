@@ -198,13 +198,12 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-
+            // TODO: if player chooses a saved profile --> LoadGame()
+            // TODO: else make a new profile from inputfield name. 
         }
 
-        // TODO: if player chooses a saved profile --> LoadGame()
-        // TODO: else make a new profile from inputfield name. 
-
     }
+
 
 
 }
