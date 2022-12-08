@@ -38,6 +38,14 @@ public class DDInput : MonoBehaviour
         _offset = GetMousePos() - (Vector2)transform.position;
     }
 
+    // checks if you dragged the wrong animal to the one in the middle 
+    public bool IsMismatch(DDTarget target)
+    {
+        if (_target == null) 
+            return Vector2.Distance(transform.position, target.transform.position) < 1;
+        else return false;
+    }
+
     void OnMouseUp()
     {
         if (_target != null)
@@ -49,15 +57,19 @@ public class DDInput : MonoBehaviour
             }
             else
             {
-                transform.position = _originalPosition;
-                _dragging = false;
+                ResetInput();
             }
         }
         else
         {
-            transform.position = _originalPosition;
-            _dragging = false;
+            ResetInput();
         }
+    }
+
+    public void ResetInput()
+    {
+        transform.position = _originalPosition;
+        _dragging = false;
     }
 
     public bool IsMatched()
@@ -65,10 +77,12 @@ public class DDInput : MonoBehaviour
         return _matched;
     }
 
+
     public void SetMatched(bool status)
     {
         _matched = status;
     }
+
 
     // Initialise the "correct" target to the input (that meand correct sound/picture to animal at the bottom)
     public void Init(DDTarget target)
