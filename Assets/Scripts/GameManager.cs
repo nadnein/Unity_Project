@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     // Transforms (positions) for the animal prefabs passed through Insprector 
     [SerializeField] private Transform _targetParent, _inputParent;
 
+
     // List of animal sounds for current environment 
     public AudioClip[] audioClips;
 
@@ -43,20 +44,20 @@ public class GameManager : MonoBehaviour
     public int _score;
 
     // penalty 
-    public int penalty; 
+    public int penalty;
 
 
     // the playerobject. 
     public GameProfile _player;
 
-    public InputField _nameInput;
+
 
     public FileDataHandler dataHandler;
 
 
     void Start()
     {
-        InitialisePlayer();
+        //dataHandler.InitialisePlayer();
         DisplayTime(countdownTime);
         penalty = 0;
         Spawn();
@@ -115,7 +116,7 @@ public class GameManager : MonoBehaviour
                         _inputs[i].ResetInput();
                         penalty += 1;
                         Debug.Log("Current Penalty is:" + penalty);
-                        
+
                     }
                 }
             }
@@ -187,23 +188,6 @@ public class GameManager : MonoBehaviour
         _score = score;
         scoreText.text = score.ToString();
     }
-
-    private void InitialisePlayer()
-    {
-        // check if inputfield is not empty and enter. 
-        if (Input.GetKeyUp(KeyCode.Return) && !(_nameInput.Equals("")))
-        {
-            _loader.Invoke("LoadMenuScene", 1f);
-            _player = new GameProfile(name);
-        }
-        else
-        {
-            // TODO: if player chooses a saved profile --> LoadGame()
-            // TODO: else make a new profile from inputfield name. 
-        }
-
-    }
-
 
 
 }
