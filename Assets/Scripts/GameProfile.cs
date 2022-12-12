@@ -5,7 +5,7 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class GameProfile : MonoBehaviour
+public class GameProfile
 {
     // a game profile.
     [SerializeField] private string _name;
@@ -50,10 +50,20 @@ public class GameProfile : MonoBehaviour
         }
     }
 
+    public string GetName()
+    {
+        return _name;
+    }
+
     public void addReactionTime(float time)
     {
 
 
+    }
+
+    public void addScore(int score)
+    {
+        _scores.Add(score);
     }
 
 }
