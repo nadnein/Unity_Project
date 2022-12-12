@@ -10,9 +10,28 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadNextScene()
     {
-
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-
         SceneManager.LoadScene(currentSceneIndex + 1);
     }
+
+    public void LoadQuitScene()
+    {
+        SceneManager.LoadScene("QuitScene");
+    }
+
+    public void LoadMenuScene()
+    {
+        SceneManager.LoadScene("MenuScene");
+    }
+
+    public void LoadLoginScene()
+    {
+        SceneManager.LoadScene("LoginScene");
+    }
+
+
+
+    //TODO: also add a quitgame x in the corner. 
+
+
 }

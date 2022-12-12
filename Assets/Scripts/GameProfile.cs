@@ -1,17 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
-public class GameProfile : MonoBehaviour
+
+[System.Serializable]
+public class GameProfile
 {
     // a game profile.
-
-    private string _name;
-    private List<int> _scores;
+    [SerializeField] private string _name;
+    [SerializeField] private List<int> _scores;
 
     public GameProfile(string name)
     {
-        _name = name;
+        SetName(name);
+        _scores = new List<int>();
     }
 
     // Finds the best score. 
@@ -20,21 +23,47 @@ public class GameProfile : MonoBehaviour
         int currentBestScore = 0;
         for (int i = 0; i < _scores.Count; i++)
         {
+            if (_scores[i] > currentBestScore)
+            {
+                currentBestScore = _scores[i];
+            }
 
         }
-        return 0; //dummy for now
+        return currentBestScore;
     }
 
     public List<int> GetScores()
     {
         return _scores;
     }
-    /*
-        public void SetName(string name){
-            if (name)
+
+
+    public void SetName(string name)
+    {
+        if (Regex.IsMatch(name, @"^[a-zA-Z]+$"))
+        {
+            _name = name;
         }
-    */
+        else
+        {
+            Debug.Log("Not valid name");
+        }
+    }
+
+    public string GetName()
+    {
+        return _name;
+    }
+
+    public void addReactionTime(float time)
+    {
 
 
+    }
+
+    public void addScore(int score)
+    {
+        _scores.Add(score);
+    }
 
 }
