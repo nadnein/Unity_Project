@@ -6,62 +6,66 @@ using TMPro;
 
 using UnityEngine;
 
+using UnityEngine.UI;
+
 public class FileDataHandler : MonoBehaviour
 {
     // Handler of the saving and loading data to file. 
 
-    public string _filename = "test.json";
-
     public TMP_InputField _nameInput;
 
-
-    public List<GameProfile> players;
-
-
-    public FileDataHandler(string filename)
-    {
-        _filename = filename;
-
-    }
+    private List<GameProfile> _players;
 
 
+    // Saves a players name and score to a file.  
     public void WriteToFile(GameProfile profile)
     {
-        string path = this.GetFilePath(_filename); //Application.dataPath;
-        FileStream fileStream = null;
-        Debug.Log(path);
+        // creates a directory
+        if (!Directory.Exists(Application.persistentDataPath + "/Profiles/"))
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/Profiles/");
+        }
 
+        // the path to the file.
+        string path = Path.Combine(Application.persistentDataPath, "Profiles/test.json");
+        FileStream fileStream = null;
+
+        // file is created if no such file. 
         if (!File.Exists(path))
         {
             fileStream = new FileStream(path, FileMode.Create);
             Debug.Log("New file created.");
 
         }
+        // write to existing file. 
         else
         {
             fileStream = new FileStream(path, FileMode.Append, FileAccess.Write);
-            Debug.Log("Try to write to already existing file");
+            Debug.Log("write to already existing file");
         }
         using (StreamWriter writer = new StreamWriter(fileStream))
         {
-            string stringToWrite = JsonUtility.ToJson(profile);
+            // writes the string in json format. 
+            string stringToWrite = JsonUtility.ToJson(profile) + "\n";
             writer.Write(stringToWrite);
             Debug.Log("Wrote to file.");
         }
     }
 
-
-
     public void ReadFromFile()
     {
-        string path = this.GetFilePath(_filename);
+        string path = Path.Combine(Application.persistentDataPath, "Profiles/test.json");
+
         if (File.Exists(path))
         {
             using (StreamReader reader = new StreamReader(path))
             {
-                string stringFromFile = reader.ReadToEnd();
-                GameProfile profile = JsonUtility.FromJson<GameProfile>(stringFromFile);
-                players.Add(profile);
+                while (!reader.EndOfStream)
+                {
+                    string str = reader.ReadLine();
+                    GameProfile profile = JsonUtility.FromJson<GameProfile>(str);
+                    _players.Add(profile);
+                }
                 Debug.Log("Done reading from file.");
             }
         }
@@ -71,47 +75,27 @@ public class FileDataHandler : MonoBehaviour
         }
     }
 
-    private string GetFilePath(string fileName)
-    {
-        return Application.persistentDataPath + "/" + fileName; //"/Users/jinbakketun/Unity_Project/Assets/Scripts";
-    }
-
-    /*
-        public void LoadGame()
-        {
-            var input = gameObject.GetComponent<InputField>();
-            GameProfile newGameProfile = new GameProfile(input);
-            input.onEndEdit.AddListener(new GameProfile(input));
-
-        }
-        */
-
-
     void Update()
     {
+        // checks if someone clicks the inputfield. 
         if (Input.GetKeyUp(KeyCode.Return) && !(_nameInput.Equals("")))
         {
-            Debug.Log(_nameInput.text);
-
-            //SceneLoader.Invoke("LoadMenuScene", 1f);
+            // SceneLoader.Invoke("LoadMenuScene", 1f);
             GameProfile gp = new GameProfile(_nameInput.text);
-            gp.addScore(10);
-            gp.addScore(111);
-            Debug.Log("The new objects name: " + gp.GetName());
             WriteToFile(gp);
         }
         else
         {
-            // TODO: if player chooses a saved profile --> LoadGame()
+            // TODO: if player chooses a saved profile. 
+            // SceneLoader.Invoke("LoadMenuScene", 1f);
         }
 
     }
-    /*
-        public void InitialisePlayer()
-        {
-            // check if inputfield is not empty and enter. 
 
-        }
-    */
+
+    public List<GameProfile> GetGameProfiles()
+    {
+        return _players;
+    }
 }
 

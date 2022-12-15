@@ -44,22 +44,18 @@ public class GameManager : MonoBehaviour
     public int _score;
 
     // penalty 
-    public int penalty;
-
+    public int penalty = 0;
 
     // the playerobject. 
     public GameProfile _player;
-
-
 
     public FileDataHandler dataHandler;
 
 
     void Start()
     {
-        //dataHandler.InitialisePlayer();
+        // dataHandler.GetGameProfiles;
         DisplayTime(countdownTime);
-        penalty = 0;
         Spawn();
     }
 

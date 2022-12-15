@@ -615,13 +615,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1055935644}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1055935646}
+        m_TargetAssemblyTypeName: FileDataHandler, Assembly-CSharp
+        m_MethodName: ReadFromFile
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -689,13 +689,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1055935644}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1054.3146, y: 1341.1478, z: 0.28371018}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 234.31458, y: 161.14783, z: 0.28371018}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_Father: {fileID: 1494742678}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1055935646
 MonoBehaviour:
@@ -709,8 +709,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5cb6a4954c3a48e5a1d2f3d02ec99bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _filename: gameTest
+  _filename: test.json
   _nameInput: {fileID: 89231704}
+  ReadBTN: {fileID: 982121459}
   players: []
 --- !u!1 &1494742674
 GameObject:
@@ -806,6 +807,7 @@ RectTransform:
   m_Children:
   - {fileID: 89231703}
   - {fileID: 982121458}
+  - {fileID: 1055935645}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -872,7 +874,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Click to save :)
+  m_text: 'Click to read from file. '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
