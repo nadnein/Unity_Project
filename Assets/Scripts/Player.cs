@@ -5,15 +5,19 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class GameProfile
+public class Player
+
 {
     // a game profile.
-    [SerializeField] private string _name;
+    //[SerializeField] private string _name;
+    public string name;
     [SerializeField] private List<int> _scores;
+    public float highScore = 0;
 
-    public GameProfile(string name)
+    public Player(string name)
     {
-        SetName(name);
+        //SetName(name);
+        this.name = name;
         _scores = new List<int>();
     }
 
@@ -42,7 +46,7 @@ public class GameProfile
     {
         if (Regex.IsMatch(name, @"^[a-zA-Z]+$"))
         {
-            _name = name;
+            this.name = name;
         }
         else
         {
@@ -52,7 +56,7 @@ public class GameProfile
 
     public string GetName()
     {
-        return _name;
+        return name;
     }
 
     public void addReactionTime(float time)

@@ -851,7 +851,7 @@ MonoBehaviour:
   - {fileID: -5259598574103616000, guid: 9090658998e35be47a83ad21e833568c, type: 3}
   - {fileID: -6108199861112763255, guid: f3d24afdfc5f5bb4fb0ff646322c05a0, type: 3}
   - {fileID: -6108199861112763255, guid: 62545c4f134d153479df70f5ce11b882, type: 3}
-  _circlePrefab: {fileID: 2773521427988058525, guid: 2f2c8ce9d35bfc24190bcc82c46075c9, type: 3}
+  _circlePrefab: {fileID: 2773521427988058525, guid: f24eff2ef0bc4624cbb9462c1ef4273c, type: 3}
   _targetParent: {fileID: 584212004}
   _inputParent: {fileID: 1807672475}
   audioClips:
@@ -860,6 +860,16 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9b93890181700eb42ba709f52a43caa0, type: 3}
   - {fileID: 8300000, guid: 210108fd68ccbed46910c5282e9e7c6b, type: 3}
   _loader: {fileID: 221459107}
+  scoreText: {fileID: 0}
+  countdownText: {fileID: 0}
+  reactionTime: 0
+  countdownTime: 30
+  _score: 0
+  penalty: 0
+  _player:
+    _name: 
+    _scores: 
+  dataHandler: {fileID: 0}
 --- !u!4 &1556780894
 Transform:
   m_ObjectHideFlags: 0

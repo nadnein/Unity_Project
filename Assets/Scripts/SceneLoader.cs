@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Mono.Cecil.Cil;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR;
 
 public class SceneLoader : MonoBehaviour
 {
@@ -19,9 +21,15 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene("QuitScene");
     }
 
-    public void LoadMenuScene()
+    public void LoadMenuScene(string playerName)
     {
-        SceneManager.LoadScene("MenuScene");
+        SceneManager.LoadSceneAsync("MainMenuScene", LoadSceneMode.Single);
+        //Players players = DataSaver.loadData<Players>("players");
+        //Player player = players.GetPlayerByName(playerName);
+        //TMP_Text welcomeText = GameObject.Find("WelcomeText").GetComponent<TMP_Text>();
+        //Debug.Log(welcomeText.text);
+        //welcomeText.text = "WELCOME";
+
     }
 
     public void LoadLoginScene()

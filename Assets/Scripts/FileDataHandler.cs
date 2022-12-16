@@ -14,11 +14,11 @@ public class FileDataHandler : MonoBehaviour
 
     public TMP_InputField _nameInput;
 
-    private List<GameProfile> _players;
+    private List<Player> _players;
 
 
     // Saves a players name and score to a file.  
-    public void WriteToFile(GameProfile profile)
+    public void WriteToFile(Player profile)
     {
         // creates a directory
         if (!Directory.Exists(Application.persistentDataPath + "/Profiles/"))
@@ -63,7 +63,7 @@ public class FileDataHandler : MonoBehaviour
                 while (!reader.EndOfStream)
                 {
                     string str = reader.ReadLine();
-                    GameProfile profile = JsonUtility.FromJson<GameProfile>(str);
+                    Player profile = JsonUtility.FromJson<Player>(str);
                     _players.Add(profile);
                 }
                 Debug.Log("Done reading from file.");
@@ -81,7 +81,7 @@ public class FileDataHandler : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Return) && !(_nameInput.Equals("")))
         {
             // SceneLoader.Invoke("LoadMenuScene", 1f);
-            GameProfile gp = new GameProfile(_nameInput.text);
+            Player gp = new Player(_nameInput.text);
             WriteToFile(gp);
         }
         else
@@ -93,7 +93,7 @@ public class FileDataHandler : MonoBehaviour
     }
 
 
-    public List<GameProfile> GetGameProfiles()
+    public List<Player> GetGameProfiles()
     {
         return _players;
     }

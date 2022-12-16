@@ -6,12 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/FarmAnimals.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Scripts/Scenes/LoginScene.unity
+    guid: e4011383dccb33e4988b82a1a074ae88
   - enabled: 1
-    path: Assets/Scenes/SafariAnimals.unity
-    guid: 28b49b486c0bf77428dacd957cdd588a
-  - enabled: 1
-    path: Assets/Scenes/JungleAnimals.unity
-    guid: 0d08e002749d4de49b3fa8d8969f83e2
+    path: Assets/Scripts/Scenes/MainMenuScene.unity
+    guid: fe9d8e19ca714f14ba5ce4ec18e6316e
   m_configObjects: {}

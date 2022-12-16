@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     private int _randomNumPicture, _randomNumSound;
 
     // Counts the number of animals shown per scene (animal environment)
-    private int _counter = 0;
+    //private int _counter = 0;
 
     // Loader to switch between scenes (animal environments)
     public SceneLoader _loader;
@@ -47,9 +47,9 @@ public class GameManager : MonoBehaviour
     public int penalty = 0;
 
     // the playerobject. 
-    public GameProfile _player;
+    public Player _player;
 
-    public FileDataHandler dataHandler;
+    //public FileDataHandler dataHandler;
 
 
     void Start()
@@ -93,9 +93,10 @@ public class GameManager : MonoBehaviour
                         Destroy(background.gameObject, 1f);
 
                         CalculateScore();
+                        Spawn();
 
                         // Switches scene if 5 animals were shown
-                        if (_counter == 5)
+                        /*if (_counter == 5)
                         {
                             // Using "Invoke" the function is executed after 1 second
                             _loader.Invoke("LoadNextScene", 1f);
@@ -104,7 +105,7 @@ public class GameManager : MonoBehaviour
                         else
                         {
                             Spawn();
-                        }
+                        }*/
 
                     }
                     else if (_inputs[i].IsMismatch(_target))
@@ -119,7 +120,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            QuitGame();
+            //QuitGame();
             Debug.Log("Countdown is over.");
         }
     }
@@ -130,7 +131,7 @@ public class GameManager : MonoBehaviour
     {
         reactionTime = 0; // Sets the timer to zero again for every new view of animals. 
 
-        _counter += 1; // increase counter 
+        //_counter += 1; // increase counter 
         _indices = Enumerable.Range(0, _inputPrefabs.Count).ToList(); // List of integers from 0 to *num of animal prefabs*
         _inputs = new List<DDInput>(); // Init list to store input animals in to access them later 
 
@@ -164,11 +165,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void QuitGame()
+    /*private void QuitGame()
     {
         dataHandler.WriteToFile(_player);
         _loader.Invoke("LoadQuitScene", 1f);
-    }
+    }*/
 
 
     private void DisplayTime(float timeToDisplay)
