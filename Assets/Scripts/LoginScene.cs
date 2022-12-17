@@ -22,36 +22,27 @@ public class LoginScene : MonoBehaviour
     private void Start()
     {
         keyboard.SetActive(false);
-        
-        try
+
+        try // open file with players if it exists
         {
-            //DataSaver.deleteData("players");
             players = DataSaver.loadData<Players>("players");
-            Debug.Log(players.players.Count);
+
+            // load button for each player in file 
             foreach (var player in players.players)
             {
-                Debug.Log(player.name);
                 addProfileButton(player.name);
             }
         }
-        catch
-        {
-            Console.WriteLine("There was an error!");
-        }
-        finally
+        catch // otherwise create new player file 
         {
             players = new Players();
-
+            DataSaver.saveData(players, "players");
         }
-    }
-
-    private void Awake()
-    {
-        players = DataSaver.loadData<Players>("players");
 
     }
 
 
+    
     public void openKeyboard()
     {
         keyboard.SetActive(true);
@@ -62,12 +53,13 @@ public class LoginScene : MonoBehaviour
         keyboard.SetActive(false);
     }
 
-     
+    // writes text to the input field 
     public void useKeyboard(string letter)
     {
         inputField.text += letter;
     }
 
+    // deletes either selected (highlighted) text or last letter from text 
     public void deleteSelection()
     {
         var start = inputField.selectionAnchorPosition;
@@ -88,42 +80,45 @@ public class LoginScene : MonoBehaviour
     public void addProfileButton(string playerName)
     {
 
-         if (tableContainer.transform.childCount < 4)
+         if (tableContainer.transform.childCount < 4) // only add new profile if less than 4 in table 
                 {
+                    // init new profile gameobject to scene with name and delete button 
                     GameObject newProfile = Instantiate(tableChild, tableContainer.transform);
+
                     var nameButton = newProfile.transform.GetChild(0);
-          
                     var deleteButton = newProfile.transform.GetChild(1);
+                    
+                    // add listener to delete button -> function that deletes player profile 
                     deleteButton.GetComponent<Button>().onClick.AddListener(() => 
                     { 
-                        Destroy(newProfile);
-                        Debug.Log("players size loginscene" + players.players.Count);
+                        Destroy(newProfile); // destroy gameobject
                         players = DataSaver.loadData<Players>("players");
-                        players.DeletePlayer(playerName);
-                        DataSaver.saveData(players, "players");
+                        players.DeletePlayer(playerName); // delete player from player object 
+                        DataSaver.saveData(players, "players"); // save modified list of players to file 
                     });
 
-                    // change Name of Profile Button Prefab 
+                    // change name of profile button prefab to player name 
                     var buttonText = nameButton.GetComponentInChildren<TMP_Text>();
-
                     buttonText.text = playerName;
 
+                    players = DataSaver.loadData<Players>("players");
+                    var player = players.GetPlayerByName(playerName);
+
+                    if (player == null) // save new player to list of players if not already there
+                    {
+                        player = new Player(playerName);
+                        players.players.Add(player);
+                        DataSaver.saveData(players, "players");
+                    };
+
+
+                    // add listener to name button -> function that deletes player profile 
                     nameButton.GetComponent<Button>().onClick.AddListener(() => 
                     {
+                        // safe player name to static class that can be accessed from all scenes 
                         ExchangeBetweenScenes.playerName = playerName;
-                        players = DataSaver.loadData<Players>("players");
-                        var player = players.GetPlayerByName(playerName);
-
-                        if (player == null) // save new player to list of players if not already there
-                        {
-                            player = new Player(playerName);
-                            Debug.Log("bei NameButton: " + players.players.Count);
-                            players.players.Add(player);
-                            Debug.Log(players.players[0].GetName());
-                            DataSaver.saveData(players, "players");
-                        };
-
-                        // Load the next Scene 
+                        
+                        // load the next Scene 
                         SceneManager.LoadScene("MainMenuScene");
                     });
 
