@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 
 
+
 public class GameManager : MonoBehaviour
 {
     // Manager of the game 
@@ -48,9 +49,8 @@ public class GameManager : MonoBehaviour
 
     private string _mode;
 
-    public GameObject retryLevelPopup;
+    public GameObject retryLevelPopup, nextLevelPopup, gameFinishedPopup;
 
-    public GameObject nextLevelPopup;
 
     private int _level = 1; 
 
@@ -59,8 +59,9 @@ public class GameManager : MonoBehaviour
     {
         retryLevelPopup.SetActive(false);
         nextLevelPopup.SetActive(false);
+        gameFinishedPopup.SetActive(false); 
         _mode = "game";
-        countdownTime = 10;
+        countdownTime = 20;
         DisplayTime(countdownTime);
         Spawn();
     }
@@ -90,16 +91,24 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if (_correctAnimals < 3)
+                if (_correctAnimals < 1)
                 {
                     RetryOrQuit();
                 }
                 else
                 {
                     _target.StopAudio();
-                    var text = nextLevelPopup.transform.GetChild(1).GetComponent<TMP_Text>();
-                    text.text = $"You made it to level {_level + 1}, good job!";
-                    nextLevelPopup.SetActive(true);
+                    if (_level == 2)
+                    {
+                        gameFinishedPopup.SetActive(true);
+                    }
+                    else
+                    {
+                        var text = nextLevelPopup.transform.GetChild(1).GetComponent<TMP_Text>();
+                        text.text = $"You made it to level {_level + 1}, good job!";
+                        nextLevelPopup.SetActive(true);
+                    }
+                    
 
                 }
                 
@@ -120,7 +129,7 @@ public class GameManager : MonoBehaviour
                 {
                     _correctAnimals++;
                     _inputs[i].SetMatched(false);
-                    for (int j = 0; j < _indices.Count; j++)
+                    for (int j = 0; j < _inputs.Count; j++)
                     {
                         Destroy(_inputs[j].gameObject); // deletes the input dragged to the animal in middle
                     }
@@ -187,12 +196,25 @@ public class GameManager : MonoBehaviour
 
         // get random order of list indices 
         var randomSet = _indices.OrderBy(s => Random.value).Take(4).ToList();
+        foreach (var num in randomSet)
+        {
+            Debug.Log(num);
+
+        }
+        var random = new System.Random();
+        int _randomNumPicture = randomSet[random.Next(randomSet.Count)];
+        Debug.Log(_randomNumPicture);
+        int _randomNumSound = randomSet[random.Next(randomSet.Count)];
+        Debug.Log(_randomNumSound);
+
+
+
 
         // get a random index for choosing the animal picture 
-        _randomNumPicture = Random.Range(0, _inputPrefabs.Count);
+        //_randomNumPicture = Random.Range(0, _inputPrefabs.Count);
 
         // get a random index for choosing the animal sound  
-        _randomNumSound = Random.Range(0, _inputPrefabs.Count);
+        //_randomNumSound = Random.Range(0, _inputPrefabs.Count);
 
         // for training animal picture and sound has to be the same 
         //_target = Instantiate(_targetPrefabs[randomNumPicture], _targetParent.position, Quaternion.identity);
@@ -203,7 +225,7 @@ public class GameManager : MonoBehaviour
         _target.SetAudioClip(audioClips[_randomNumSound]);
 
 
-        for (int i = 0; i < randomSet.Count; i++)
+        for (int i = 0; i < randomSet.Count; i++) 
         {
             var input = Instantiate(_inputPrefabs[randomSet[i]], _inputParent.GetChild(i).position, Quaternion.identity);
             _inputs.Add(input);

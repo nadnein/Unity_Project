@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5723094965122995192}
   - component: {fileID: 5723094965122995193}
   - component: {fileID: 7862770405563395910}
+  - component: {fileID: -1075294005421243405}
   m_Layer: 0
   m_Name: dog_big
   m_TagString: cat
@@ -181,3 +182,17 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-1075294005421243405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5723094965122995194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20b0c1c8834b24f488f8ec4c4a6fab7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _audioSource: {fileID: 7862770405563395910}
+  _completeClip: {fileID: 8300000, guid: 84499616b2538bc46ae83571f0769ce1, type: 3}

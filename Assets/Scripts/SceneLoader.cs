@@ -20,6 +20,19 @@ public class SceneLoader : MonoBehaviour
     {
         SceneManager.LoadScene("FarmAnimals");
     }
+    public void LoadJungleAnimalGame()
+    {
+        SceneManager.LoadScene("JungleAnimals");
+    }
+    public void LoadSafariAnimalGame()
+    {
+        SceneManager.LoadScene("SafariAnimals");
+    }
+
+    public void LoadSelectGameModeScene()
+    {
+        SceneManager.LoadScene("SelectGameModeScene");
+    }
 
     public void LoadQuitScene()
     {
