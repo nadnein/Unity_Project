@@ -2,26 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenuScene : MonoBehaviour
 {
     public TMP_Text welcomeText;
-
-    // Start is called before the first frame update
-    void Start()
+    // called zero
+    void Awake()
     {
-        Debug.Log("test");
-        welcomeText.text = "hallo";
- 
+        Debug.Log("Awake");
     }
 
-    // Update is called once per frame
-    void Update()
-
+    // called first
+    void OnEnable()
     {
-        welcomeText.text = "hallo";
-        Debug.Log("test");
+        Debug.Log("OnEnable called");
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
 
+    // called second
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("OnSceneLoaded: " + scene.name);
+        Debug.Log(mode);
+        welcomeText.text = "Welcome " + ExchangeBetweenScenes.playerName + " !";
+    }
 
+    // called third
+    void Start()
+    {
+        Debug.Log("Start");
+    }
+
+    // called when the game is terminated
+    void OnDisable()
+    {
+        Debug.Log("OnDisable");
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene("FarmAnimals");
     }
 }

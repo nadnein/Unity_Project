@@ -16,19 +16,19 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene(currentSceneIndex + 1);
     }
 
+    public void LoadFarmAnimalGame()
+    {
+        SceneManager.LoadScene("FarmAnimals");
+    }
+
     public void LoadQuitScene()
     {
         SceneManager.LoadScene("QuitScene");
     }
 
-    public void LoadMenuScene(string playerName)
+    public void LoadMenuScene()
     {
-        SceneManager.LoadSceneAsync("MainMenuScene", LoadSceneMode.Single);
-        //Players players = DataSaver.loadData<Players>("players");
-        //Player player = players.GetPlayerByName(playerName);
-        //TMP_Text welcomeText = GameObject.Find("WelcomeText").GetComponent<TMP_Text>();
-        //Debug.Log(welcomeText.text);
-        //welcomeText.text = "WELCOME";
+        SceneManager.LoadSceneAsync("MainMenuScene");
 
     }
 

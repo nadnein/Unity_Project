@@ -6,6 +6,7 @@ using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
@@ -121,7 +122,9 @@ public class LoginScene : MonoBehaviour
                             Debug.Log(players.players[0].GetName());
                             DataSaver.saveData(players, "players");
                         };
-                        loader.LoadMenuScene(playerName);
+
+                        // Load the next Scene 
+                        SceneManager.LoadScene("MainMenuScene");
                     });
 
                 }

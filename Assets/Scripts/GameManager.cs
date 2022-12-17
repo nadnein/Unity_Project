@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     private int _randomNumPicture, _randomNumSound;
 
     // Counts the number of animals shown per scene (animal environment)
-    //private int _counter = 0;
+    private int _counter = 0;
 
     // Loader to switch between scenes (animal environments)
     public SceneLoader _loader;
@@ -38,90 +38,118 @@ public class GameManager : MonoBehaviour
     public TMP_Text scoreText, countdownText;
 
     // Reaction time in milliseconds. CountdownTime in seconds. 
-    public float reactionTime, countdownTime = 30;
+    public float reactionTime, countdownTime;
 
     // the score 
     public int _score;
 
     // penalty 
-    public int penalty = 0;
+    public int penalty, _correctAnimals = 0;
 
     // the playerobject. 
-    public Player _player;
+    //public Player _player;
 
     //public FileDataHandler dataHandler;
+
+    private string _mode;
+
+    public GameObject popup; 
 
 
     void Start()
     {
-        // dataHandler.GetGameProfiles;
+        popup.SetActive(false);
+        _mode = "game";
+        countdownTime = 30;
         DisplayTime(countdownTime);
         Spawn();
     }
 
     void Update()
     {
+        if (_mode == "training")
+        {
+            if (_counter < 5)
+            {
+                CheckMatchOrMismatch();
+            }
+            else
+            {
+                _mode = "game";
+            }
+        }
+        else if (_mode == "game")
+        {
+
+        }
         // Checks if the timer is still going.
         if (countdownTime > 0)
         {
             countdownTime -= Time.deltaTime;  // Subtracts the time from the timer set.  
             DisplayTime(countdownTime);
-            reactionTime += (Time.deltaTime * 1000); // Adds the time between startime and now. 
-
-            if (_inputs != null)
-            {
-                for (int i = 0; i < _inputs.Count; i++)
-                {
-                    if (_inputs[i].IsMatched()) // Constantly checks if a "match" happened
-                    {
-                        _inputs[i].SetMatched(false);
-                        for (int j = 0; j < _indices.Count; j++)
-                        {
-                            Destroy(_inputs[j].gameObject); // deletes the input dragged to the animal in middle
-                        }
-                        Destroy(_target.gameObject); // deletes animal in middle 
-
-                        var background = Instantiate(_circlePrefab, _targetParent.position, Quaternion.identity); // adds circle background to animal 
-                        background.GetComponent<SpriteRenderer>().sortingOrder = 1;
-
-                        var solution = Instantiate(_targetPrefabs[_randomNumSound], _targetParent.position, Quaternion.identity); // adds correct animal 
-                        solution.GetComponent<SpriteRenderer>().sortingOrder = 2;
-
-                        solution.Increase();
-
-                        Destroy(solution.gameObject, 1f);
-                        Destroy(background.gameObject, 1f);
-
-                        CalculateScore();
-                        Spawn();
-
-                        // Switches scene if 5 animals were shown
-                        /*if (_counter == 5)
-                        {
-                            // Using "Invoke" the function is executed after 1 second
-                            _loader.Invoke("LoadNextScene", 1f);
-                        }
-                        // Otherwise spawn animals again 
-                        else
-                        {
-                            Spawn();
-                        }*/
-
-                    }
-                    else if (_inputs[i].IsMismatch(_target))
-                    {
-                        _inputs[i].ResetInput();
-                        penalty += 1;
-                        Debug.Log("Current Penalty is:" + penalty);
-
-                    }
-                }
-            }
+            //reactionTime += (Time.deltaTime * 1000); // Adds the time between startime and now. 
+            CheckMatchOrMismatch();   
         }
         else
         {
-            //QuitGame();
+            QuitGame();
             Debug.Log("Countdown is over.");
+        }
+    }
+
+    void CheckMatchOrMismatch()
+    {
+        if (_inputs != null)
+        {
+            for (int i = 0; i < _inputs.Count; i++)
+            {
+                if (_inputs[i].IsMatched()) // Constantly checks if a "match" happened
+                {
+                    _correctAnimals++;
+                    _inputs[i].SetMatched(false);
+                    for (int j = 0; j < _indices.Count; j++)
+                    {
+                        Destroy(_inputs[j].gameObject); // deletes the input dragged to the animal in middle
+                    }
+                    Destroy(_target.gameObject); // deletes animal in middle 
+
+                    var background = Instantiate(_circlePrefab, _targetParent.position, Quaternion.identity); // adds circle background to animal 
+                    background.GetComponent<SpriteRenderer>().sortingOrder = 1;
+
+                    var solution = Instantiate(_targetPrefabs[_randomNumSound], _targetParent.position, Quaternion.identity); // adds correct animal 
+                    solution.GetComponent<SpriteRenderer>().sortingOrder = 2;
+
+                    solution.Increase();
+
+                    Destroy(solution.gameObject, 1f);
+                    Destroy(background.gameObject, 1f);
+
+                    CalculateScore();
+                    Spawn();
+
+                    // Switches scene if 5 animals were shown
+                    /*if (_counter == 5)
+                    {
+                        // Using "Invoke" the function is executed after 1 second
+                        _loader.Invoke("LoadNextScene", 1f);
+                    }
+                    // Otherwise spawn animals again 
+                    else
+                    {
+                        Spawn();
+                    }*/
+
+                }
+                else if (_inputs[i].IsMismatch(_target))
+                {
+                    _inputs[i].ResetInput();
+
+                    // add penalty if user tries to drag and drop wrong animal 
+                    penalty += 1;
+                    Debug.Log("Current Penalty is:" + penalty);
+
+                }
+            }
         }
     }
 
@@ -165,11 +193,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /*private void QuitGame()
+    private void QuitGame()
     {
-        dataHandler.WriteToFile(_player);
-        _loader.Invoke("LoadQuitScene", 1f);
-    }*/
+        // write to file 
+
+        popup.SetActive(true);
+    }
 
 
     private void DisplayTime(float timeToDisplay)
