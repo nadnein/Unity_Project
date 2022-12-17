@@ -1641,7 +1641,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'select a profile!
+  m_text: 'Select a profile!
 
 '
   m_isRightToLeft: 0
