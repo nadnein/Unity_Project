@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
 
     private string _mode;
 
-    public GameObject popup; 
+    public GameObject popup;
 
 
     void Start()
@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
             countdownTime -= Time.deltaTime;  // Subtracts the time from the timer set.  
             DisplayTime(countdownTime);
             //reactionTime += (Time.deltaTime * 1000); // Adds the time between startime and now. 
-            CheckMatchOrMismatch();   
+            CheckMatchOrMismatch();
         }
         else
         {
@@ -210,9 +210,12 @@ public class GameManager : MonoBehaviour
 
     private void CalculateScore()
     {
+
+        /*
         int score = Mathf.FloorToInt(Mathf.Round((reactionTime)));
         _score = score;
         scoreText.text = score.ToString();
+    */
     }
 
 

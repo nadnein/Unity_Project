@@ -10,7 +10,7 @@ using UnityEngine;
 public class Players
 {
     public List<Player> players = new List<Player>();
-        
+
 
     public Player GetPlayerByName(string name)
     {
@@ -26,5 +26,12 @@ public class Players
 
         Debug.Log(myIndex);
         this.players.RemoveAt(myIndex);
+    }
+
+    public List<int> getPlayersHighScores()
+    {
+        List<int> scores = new List<int>();
+        players.ForEach(player => scores.Add(player.FindBestScore()));
+        return scores;
     }
 }
