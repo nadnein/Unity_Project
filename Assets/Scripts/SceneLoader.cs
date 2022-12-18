@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Mono.Cecil.Cil;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR;
 
 public class SceneLoader : MonoBehaviour
 {
@@ -14,6 +16,11 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene(currentSceneIndex + 1);
     }
 
+    public void LoadFarmAnimalGame()
+    {
+        SceneManager.LoadScene("FarmAnimals");
+    }
+
     public void LoadQuitScene()
     {
         SceneManager.LoadScene("QuitScene");
@@ -21,7 +28,8 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadMenuScene()
     {
-        SceneManager.LoadScene("MenuScene");
+        SceneManager.LoadSceneAsync("MainMenuScene");
+
     }
 
     public void LoadLoginScene()

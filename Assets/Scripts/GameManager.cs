@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Collections;
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
 
 
 public class GameManager : MonoBehaviour
@@ -38,94 +36,156 @@ public class GameManager : MonoBehaviour
     public TMP_Text scoreText, countdownText;
 
     // Reaction time in milliseconds. CountdownTime in seconds. 
-    public float reactionTime, countdownTime = 30;
-
-    // the score 
-    public int _score;
+    public float reactionTime, countdownTime;
 
     // penalty 
-    public int penalty;
-
+    private int _score, _penalty, _correctAnimals = 0;
 
     // the playerobject. 
-    public GameProfile _player;
+    //public Player _player;
 
+    //public FileDataHandler dataHandler;
 
+    private string _mode;
 
-    public FileDataHandler dataHandler;
+    public GameObject retryLevelPopup;
+
+    public GameObject nextLevelPopup;
+
+    private int _level = 1;
 
 
     void Start()
     {
-        //dataHandler.InitialisePlayer();
+        retryLevelPopup.SetActive(false);
+        nextLevelPopup.SetActive(false);
+        _mode = "game";
+        countdownTime = 10;
         DisplayTime(countdownTime);
-        penalty = 0;
         Spawn();
     }
 
     void Update()
     {
+        if (_mode == "training")
+        {
+            if (_counter < 5)
+            {
+                CheckMatchOrMismatch();
+            }
+            else
+            {
+                _mode = "game";
+            }
+        }
+        else if (_mode == "game")
+        {
+            // Checks if the timer is still going.
+            if (countdownTime > 0)
+            {
+                countdownTime -= Time.deltaTime;  // Subtracts the time from the timer set.  
+                DisplayTime(countdownTime);
+                //reactionTime += (Time.deltaTime * 1000); // Adds the time between startime and now. 
+                CheckMatchOrMismatch();
+            }
+            else
+            {
+                if (_correctAnimals < 3)
+                {
+                    RetryOrQuit();
+                }
+                else
+                {
+                    _target.StopAudio();
+                    var text = nextLevelPopup.transform.GetChild(1).GetComponent<TMP_Text>();
+                    text.text = $"You made it to level {_level + 1}, good job!";
+                    nextLevelPopup.SetActive(true);
+
+                }
+
+                Debug.Log("Countdown is over.");
+            }
+        }
         // Checks if the timer is still going.
         if (countdownTime > 0)
         {
             countdownTime -= Time.deltaTime;  // Subtracts the time from the timer set.  
             DisplayTime(countdownTime);
-            reactionTime += (Time.deltaTime * 1000); // Adds the time between startime and now. 
-
-            if (_inputs != null)
-            {
-                for (int i = 0; i < _inputs.Count; i++)
-                {
-                    if (_inputs[i].IsMatched()) // Constantly checks if a "match" happened
-                    {
-                        _inputs[i].SetMatched(false);
-                        for (int j = 0; j < _indices.Count; j++)
-                        {
-                            Destroy(_inputs[j].gameObject); // deletes the input dragged to the animal in middle
-                        }
-                        Destroy(_target.gameObject); // deletes animal in middle 
-
-                        var background = Instantiate(_circlePrefab, _targetParent.position, Quaternion.identity); // adds circle background to animal 
-                        background.GetComponent<SpriteRenderer>().sortingOrder = 1;
-
-                        var solution = Instantiate(_targetPrefabs[_randomNumSound], _targetParent.position, Quaternion.identity); // adds correct animal 
-                        solution.GetComponent<SpriteRenderer>().sortingOrder = 2;
-
-                        solution.Increase();
-
-                        Destroy(solution.gameObject, 1f);
-                        Destroy(background.gameObject, 1f);
-
-                        CalculateScore();
-
-                        // Switches scene if 5 animals were shown
-                        if (_counter == 5)
-                        {
-                            // Using "Invoke" the function is executed after 1 second
-                            _loader.Invoke("LoadNextScene", 1f);
-                        }
-                        // Otherwise spawn animals again 
-                        else
-                        {
-                            Spawn();
-                        }
-
-                    }
-                    else if (_inputs[i].IsMismatch(_target))
-                    {
-                        _inputs[i].ResetInput();
-                        penalty += 1;
-                        Debug.Log("Current Penalty is:" + penalty);
-
-                    }
-                }
-            }
+            //reactionTime += (Time.deltaTime * 1000); // Adds the time between startime and now. 
+            CheckMatchOrMismatch();
         }
         else
         {
             QuitGame();
             Debug.Log("Countdown is over.");
         }
+
+    }
+
+    void CheckMatchOrMismatch()
+    {
+        CalculateScore();
+        if (_inputs != null)
+        {
+            for (int i = 0; i < _inputs.Count; i++)
+            {
+                if (_inputs[i].IsMatched()) // Constantly checks if a "match" happened
+                {
+                    _correctAnimals++;
+                    _inputs[i].SetMatched(false);
+                    for (int j = 0; j < _indices.Count; j++)
+                    {
+                        Destroy(_inputs[j].gameObject); // deletes the input dragged to the animal in middle
+                    }
+                    Destroy(_target.gameObject); // deletes animal in middle 
+
+                    var background = Instantiate(_circlePrefab, _targetParent.position, Quaternion.identity); // adds circle background to animal 
+                    background.GetComponent<SpriteRenderer>().sortingOrder = 1;
+
+                    var solution = Instantiate(_targetPrefabs[_randomNumSound], _targetParent.position, Quaternion.identity); // adds correct animal 
+                    solution.GetComponent<SpriteRenderer>().sortingOrder = 2;
+
+                    solution.ShowSoulutionAnimal();
+
+                    Destroy(solution.gameObject, 1f);
+                    Destroy(background.gameObject, 1f);
+
+                    Spawn();
+
+                    // Switches scene if 5 animals were shown
+                    /*if (_counter == 5)
+                    {
+                        // Using "Invoke" the function is executed after 1 second
+                        _loader.Invoke("LoadNextScene", 1f);
+                    }
+                    // Otherwise spawn animals again 
+                    else
+                    {
+                        Spawn();
+                    }*/
+
+                }
+                else if (_inputs[i].IsMismatch(_target))
+                {
+                    _inputs[i].ResetInput();
+
+                    // add penalty if user tries to drag and drop wrong animal 
+                    _penalty += 1;
+                    Debug.Log("Current Penalty is:" + _penalty);
+
+                }
+            }
+        }
+    }
+
+    public void StartNextLevel()
+    {
+        nextLevelPopup.SetActive(false);
+        _target.StartAudio();
+        countdownTime = 10 / 2;
+        _correctAnimals = 0;
+        _level++;
+        _score = 0;
     }
 
 
@@ -134,7 +194,7 @@ public class GameManager : MonoBehaviour
     {
         reactionTime = 0; // Sets the timer to zero again for every new view of animals. 
 
-        _counter += 1; // increase counter 
+        //_counter += 1; // increase counter 
         _indices = Enumerable.Range(0, _inputPrefabs.Count).ToList(); // List of integers from 0 to *num of animal prefabs*
         _inputs = new List<DDInput>(); // Init list to store input animals in to access them later 
 
@@ -168,10 +228,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void QuitGame()
+    private void RetryOrQuit()
     {
-        dataHandler.WriteToFile(_player);
-        _loader.Invoke("LoadQuitScene", 1f);
+        // write to file 
+        _target.StopAudio();
+        retryLevelPopup.SetActive(true);
     }
 
 
@@ -179,15 +240,16 @@ public class GameManager : MonoBehaviour
     {
         float minutes = Mathf.FloorToInt(countdownTime / 60);
         float seconds = Mathf.FloorToInt(countdownTime % 60);
-        countdownText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        countdownText.text = $"TIME: {string.Format("{0:00}:{1:00}", minutes, seconds)}";
     }
 
     private void CalculateScore()
     {
         int score = Mathf.FloorToInt(Mathf.Round((reactionTime)));
         _score = score;
-        scoreText.text = score.ToString();
+        scoreText.text = $"SCORE: {_correctAnimals.ToString()}";
     }
+
 
 
 }
