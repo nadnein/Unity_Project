@@ -22,7 +22,12 @@ public class Players
     {
         int myIndex = this.players.FindIndex(player => player.name == name);
         int cnt = players.Count;
+        
         Debug.Log("players ist so lang: " + cnt.ToString());
+        foreach (var player in players)
+        {
+            Debug.Log(player.name);
+        }
 
         Debug.Log(myIndex);
         this.players.RemoveAt(myIndex);
