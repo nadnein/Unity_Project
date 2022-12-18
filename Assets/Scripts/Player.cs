@@ -41,7 +41,6 @@ public class Player
         return _scores;
     }
 
-
     public void SetName(string name)
     {
         if (Regex.IsMatch(name, @"^[a-zA-Z]+$"))
@@ -69,5 +68,14 @@ public class Player
     {
         _scores.Add(score);
     }
+
+    /*
+
+    public int getHighestScore()
+    {
+        return null;
+
+    }
+    */
 
 }

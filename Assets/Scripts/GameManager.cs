@@ -37,10 +37,10 @@ public class GameManager : MonoBehaviour
     public TMP_Text scoreText, countdownText;
 
     // Reaction time in milliseconds. CountdownTime in seconds. 
-    public float reactionTime, countdownTime; 
+    public float reactionTime, countdownTime;
 
     // penalty 
-    private int _score, _penalty, _correctAnimals = 0; 
+    private int _score, _penalty, _correctAnimals = 0;
 
     // the playerobject. 
     //public Player _player;
@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
     public GameObject retryLevelPopup, nextLevelPopup, gameFinishedPopup;
 
 
-    private int _level = 1; 
+    private int _level = 1;
 
 
     void Start()
@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
                 countdownTime -= Time.deltaTime;  // Subtracts the time from the timer set.  
                 DisplayTime(countdownTime);
                 //reactionTime += (Time.deltaTime * 1000); // Adds the time between startime and now. 
-                CheckMatchOrMismatch();   
+                CheckMatchOrMismatch();
             }
             else
             {
@@ -111,11 +111,24 @@ public class GameManager : MonoBehaviour
                     
 
                 }
-                
+
                 Debug.Log("Countdown is over.");
             }
         }
-        
+        // Checks if the timer is still going.
+        if (countdownTime > 0)
+        {
+            countdownTime -= Time.deltaTime;  // Subtracts the time from the timer set.  
+            DisplayTime(countdownTime);
+            //reactionTime += (Time.deltaTime * 1000); // Adds the time between startime and now. 
+            CheckMatchOrMismatch();
+        }
+        else
+        {
+            QuitGame();
+            Debug.Log("Countdown is over.");
+        }
+
     }
 
     void CheckMatchOrMismatch()
@@ -181,7 +194,7 @@ public class GameManager : MonoBehaviour
         countdownTime = 10 / 2;
         _correctAnimals = 0;
         _level++;
-        _score = 0;  
+        _score = 0;
     }
 
 
@@ -255,7 +268,7 @@ public class GameManager : MonoBehaviour
     private void CalculateScore()
     {
         int score = Mathf.FloorToInt(Mathf.Round((reactionTime)));
-        _score = score; 
+        _score = score;
         scoreText.text = $"SCORE: {_correctAnimals.ToString()}";
     }
 
