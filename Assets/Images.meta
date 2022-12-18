@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Images.meta
 guid: 5709814260e654531b465e1c2684bb88
 folderAsset: yes
+=======
+guid: 6b79efb0946c48d45b49c9057932823c
+>>>>>>> jin_new:Assets/Scenes/LoginScene.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
