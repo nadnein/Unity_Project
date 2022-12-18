@@ -14,11 +14,7 @@ using Button = UnityEngine.UI.Button;
 public class LoginScene : MonoBehaviour
 {
     public TMP_InputField inputField;
-<<<<<<< HEAD
     public GameObject keyboard, tableContainer, tableChild;
-=======
-    public GameObject keyboard, tableContainer, tableChild;  
->>>>>>> jin_new
     public SceneLoader loader;
     public Players players;
 

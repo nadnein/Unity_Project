@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
     {
         retryLevelPopup.SetActive(false);
         nextLevelPopup.SetActive(false);
-        gameFinishedPopup.SetActive(false); 
+        gameFinishedPopup.SetActive(false);
         _mode = "game";
         countdownTime = 20;
         DisplayTime(countdownTime);
@@ -108,7 +108,7 @@ public class GameManager : MonoBehaviour
                         text.text = $"You made it to level {_level + 1}, good job!";
                         nextLevelPopup.SetActive(true);
                     }
-                    
+
 
                 }
 
@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            QuitGame();
+            // QuitGame();
             Debug.Log("Countdown is over.");
         }
 
@@ -238,7 +238,7 @@ public class GameManager : MonoBehaviour
         _target.SetAudioClip(audioClips[_randomNumSound]);
 
 
-        for (int i = 0; i < randomSet.Count; i++) 
+        for (int i = 0; i < randomSet.Count; i++)
         {
             var input = Instantiate(_inputPrefabs[randomSet[i]], _inputParent.GetChild(i).position, Quaternion.identity);
             _inputs.Add(input);
