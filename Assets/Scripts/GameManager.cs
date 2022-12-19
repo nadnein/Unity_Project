@@ -4,10 +4,10 @@ using TMPro;
 using UnityEngine;
 
 
+// Manager of the game 
 
 public class GameManager : MonoBehaviour
 {
-    // Manager of the game 
 
     // Prefabs for the animal inputs and targets passed through the Unity Inspector
     [SerializeField] private List<DDTarget> _targetPrefabs;
@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     // Transforms (positions) for the animal prefabs passed through Insprector 
     [SerializeField] private Transform _targetParent, _inputParent;
 
-
     // List of animal sounds for current environment 
     public AudioClip[] audioClips;
 
@@ -26,32 +25,29 @@ public class GameManager : MonoBehaviour
     private DDTarget _target;
     private List<int> _indices;
     private int _randomNumPicture, _randomNumSound;
+    private int index;
 
-    // Counts the number of animals shown per scene (animal environment)
-    private int _counter = 0;
+    // Variables for calculating the score
+    private int _counter, _score, _penalty, _correctAnimals = 0;
 
     // Loader to switch between scenes (animal environments)
     public SceneLoader _loader;
 
     // Text in the UI.
-    public TMP_Text scoreText, countdownText;
+    public TMP_Text correctText, countdownText, scoreTextFinished, ScoreTextRetry;
 
     // Reaction time in milliseconds. CountdownTime in seconds. 
-    public float reactionTime, countdownTime; 
+    public float countdown;
+    private float countdownTime = 90;
 
-    // penalty 
-    private int _score, _penalty, _correctAnimals = 0; 
 
-    // the playerobject. 
-    //public Player _player;
-
-    //public FileDataHandler dataHandler;
-
+    // mode of the game, either "training", "game" or "break"
     private string _mode;
 
+    // Popup windows
     public GameObject retryLevelPopup, nextLevelPopup, gameFinishedPopup, taskPopup;
 
-
+    // current level
     private int _level = 1; 
 
 
@@ -61,9 +57,8 @@ public class GameManager : MonoBehaviour
         retryLevelPopup.SetActive(false);
         nextLevelPopup.SetActive(false);
         gameFinishedPopup.SetActive(false); 
-        _mode = "game";
-        countdownTime = 20;
-        DisplayTime(countdownTime);
+        _mode = "training";
+        countdown = countdownTime;
         Spawn();
     }
 
@@ -71,37 +66,40 @@ public class GameManager : MonoBehaviour
     {
         if (_mode == "training")
         {
-            if (_counter < 5)
+            if (_counter < 2)
             {
+                DisplayAnimalNumber();
                 CheckMatchOrMismatch();
             }
             else
             {
-                _mode = "game";
+                _target.StopAudio();
+                taskPopup.SetActive(true);
             }
         }
         else if (_mode == "game")
         {
             // Checks if the timer is still going.
-            if (countdownTime > 0)
+            if (countdown > 0)
             {
-                countdownTime -= Time.deltaTime;  // Subtracts the time from the timer set.  
-                DisplayTime(countdownTime);
-                //reactionTime += (Time.deltaTime * 1000); // Adds the time between startime and now. 
+                countdown -= Time.deltaTime;  // Subtracts the time from the timer set.  
+                DisplayTime(countdown);
+                DisplayNumCorrect();
                 CheckMatchOrMismatch();   
             }
             else
             {
-                if (_correctAnimals < 1)
+                if (_correctAnimals < 5)
                 {
                     RetryOrQuit();
                 }
                 else
                 {
                     _target.StopAudio();
-                    if (_level == 2)
+                    if (_level == 3)
                     {
                         gameFinishedPopup.SetActive(true);
+                        scoreTextFinished.text = $"SCORE: {CalculateScore()}";
                     }
                     else
                     {
@@ -121,7 +119,7 @@ public class GameManager : MonoBehaviour
 
     void CheckMatchOrMismatch()
     {
-        CalculateScore();
+        //CalculateScore();
         if (_inputs != null)
         {
             for (int i = 0; i < _inputs.Count; i++)
@@ -139,7 +137,7 @@ public class GameManager : MonoBehaviour
                     var background = Instantiate(_circlePrefab, _targetParent.position, Quaternion.identity); // adds circle background to animal 
                     background.GetComponent<SpriteRenderer>().sortingOrder = 1;
 
-                    var solution = Instantiate(_targetPrefabs[_randomNumSound], _targetParent.position, Quaternion.identity); // adds correct animal 
+                    var solution = Instantiate(_targetPrefabs[index], _targetParent.position, Quaternion.identity); // adds correct animal 
                     solution.GetComponent<SpriteRenderer>().sortingOrder = 2;
 
                     solution.ShowSoulutionAnimal();
@@ -148,18 +146,6 @@ public class GameManager : MonoBehaviour
                     Destroy(background.gameObject, 1f);
 
                     Spawn();
-
-                    // Switches scene if 5 animals were shown
-                    /*if (_counter == 5)
-                    {
-                        // Using "Invoke" the function is executed after 1 second
-                        _loader.Invoke("LoadNextScene", 1f);
-                    }
-                    // Otherwise spawn animals again 
-                    else
-                    {
-                        Spawn();
-                    }*/
 
                 }
                 else if (_inputs[i].IsMismatch(_target))
@@ -179,19 +165,18 @@ public class GameManager : MonoBehaviour
     {
         nextLevelPopup.SetActive(false);
         _target.StartAudio();
-        countdownTime = 10 / 2;
+        countdown = countdownTime / 2;
         _correctAnimals = 0;
         _level++;
-        _score = 0;  
+        _score = 0;
     }
 
 
     // Spawns animals on the screen 
     public void Spawn()
     {
-        reactionTime = 0; // Sets the timer to zero again for every new view of animals. 
 
-        //_counter += 1; // increase counter 
+        _counter += 1; // increase counter 
         _indices = Enumerable.Range(0, _inputPrefabs.Count).ToList(); // List of integers from 0 to *num of animal prefabs*
         _inputs = new List<DDInput>(); // Init list to store input animals in to access them later 
 
@@ -203,27 +188,17 @@ public class GameManager : MonoBehaviour
 
         }
         var random = new System.Random();
-        int _randomNumPicture = randomSet[random.Next(randomSet.Count)];
+        _randomNumPicture = randomSet[random.Next(randomSet.Count)];
         Debug.Log(_randomNumPicture);
-        int _randomNumSound = randomSet[random.Next(randomSet.Count)];
+        _randomNumSound = randomSet[random.Next(randomSet.Count)];
         Debug.Log(_randomNumSound);
+        if (_mode == "training") index = _randomNumPicture;
+        else if (_mode == "game") index = _randomNumSound;
 
-
-
-
-        // get a random index for choosing the animal picture 
-        //_randomNumPicture = Random.Range(0, _inputPrefabs.Count);
-
-        // get a random index for choosing the animal sound  
-        //_randomNumSound = Random.Range(0, _inputPrefabs.Count);
-
-        // for training animal picture and sound has to be the same 
-        //_target = Instantiate(_targetPrefabs[randomNumPicture], _targetParent.position, Quaternion.identity);
-        //_target.SetAudioClip(audioClips[randomNumPicture]);
 
         // for game mode animal picture and sound can differ 
         _target = Instantiate(_targetPrefabs[_randomNumPicture], _targetParent.position, Quaternion.identity);
-        _target.SetAudioClip(audioClips[_randomNumSound]);
+        _target.SetAudioClip(audioClips[index]);
 
 
         for (int i = 0; i < randomSet.Count; i++) 
@@ -231,7 +206,7 @@ public class GameManager : MonoBehaviour
             var input = Instantiate(_inputPrefabs[randomSet[i]], _inputParent.GetChild(i).position, Quaternion.identity);
             _inputs.Add(input);
 
-            if (randomSet[i] == _randomNumSound) // in case of training change to randomNumPicture
+            if (randomSet[i] == index) 
             {
                 input.Init(_target); // Here we remember what input and target match 
             }
@@ -240,24 +215,65 @@ public class GameManager : MonoBehaviour
 
     private void RetryOrQuit()
     {
-        // write to file 
+        _mode = "break";
         _target.StopAudio();
+        ScoreTextRetry.text = $"SCORE: {CalculateScore()}";
         retryLevelPopup.SetActive(true);
+    }
+
+    public void StartGame()
+    {
+        _mode = "game";
+        _correctAnimals = 0;
+        taskPopup.SetActive(false);
+        _target.StartAudio();
     }
 
 
     private void DisplayTime(float timeToDisplay)
     {
-        float minutes = Mathf.FloorToInt(countdownTime / 60);
-        float seconds = Mathf.FloorToInt(countdownTime % 60);
-        countdownText.text = $"TIME: {string.Format("{0:00}:{1:00}", minutes, seconds)}";
+
+        float minutes = Mathf.FloorToInt(countdown / 60);
+        float seconds = Mathf.FloorToInt(countdown % 60);
+
+        if (minutes < 0 || seconds < 0)
+        {
+            countdownText.text = "TIME:--:--";
+        }
+        else
+        {
+            countdownText.text = $"TIME: {string.Format("{0:00}:{1:00}", minutes, seconds)}";
+        }
     }
 
-    private void CalculateScore()
+    private void DisplayNumCorrect()
     {
-        int score = Mathf.FloorToInt(Mathf.Round((reactionTime)));
-        _score = score; 
-        scoreText.text = $"SCORE: {_correctAnimals.ToString()}";
+        correctText.text = $"CORRECT: {_correctAnimals.ToString()}";
+    }
+
+    private int CalculateScore()
+    {
+        _mode = "break";
+
+        // equation that calculates score 
+        _score = Mathf.RoundToInt(((_correctAnimals - _penalty)/countdownTime) * 1000);
+
+        if (_score < 0) _score = 0; // Set score to 0 if negative 
+        var players = DataSaver.loadData<Players>("players");
+        var player = players.GetPlayerByName(ExchangeBetweenScenes.playerName);
+        player.addScore(_score);
+
+
+        if (_score > player.highScore) player.highScore = _score; // set new highscore 
+
+        // write to players file 
+        DataSaver.saveData(players, "players");
+        return _score;
+    }
+
+    private void DisplayAnimalNumber()
+    {
+        correctText.text = $"ANIMAL {_counter.ToString()}/30";
     }
 
 

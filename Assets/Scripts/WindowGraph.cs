@@ -5,17 +5,41 @@ using TreeEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using CodeMonkey.Utils;
+using TMPro;
+using System.Linq;
 
+// Class that loads the graph with scores of current player 
+// Tutorial from: https://www.youtube.com/watch?v=CmU5-v-v1Qo&t=22s
 public class WindowGraph : MonoBehaviour
 {
     [SerializeField] private Sprite circleSprite;
     private RectTransform graphContainer;
+    private float maxScore; 
 
-    private void Awake()
+    private void Start()
     {
         graphContainer = transform.Find("GraphContainer").GetComponent<RectTransform>();
+        List<int> valueList = new List<int>();
+        var players = DataSaver.loadData<Players>("players");
+        var player = players.GetPlayerByName(ExchangeBetweenScenes.playerName);
+      
+        var scores = player.GetScores();
+        if (scores.Count < 25)
+        {
+            for (int i = 0; i < scores.Count; i++)
+            {
+                valueList.Add(scores[i]);
+            }
+        }
+        else
+        {
+            for (int i = Math.Max(0, scores.Count - 25); i < scores.Count; ++i)
+            {
+                valueList.Add(scores[i]);
+            }
+        }
 
-        List<int> valueList = new List<int>() { 5, 300, 200, 98, 56, 45, 30, 22, 17, 15, 13, 17, 25, 37, 40, 36, 33};
+        maxScore = valueList.Max();
         ShowGraph(valueList);
     }
 
@@ -36,8 +60,8 @@ public class WindowGraph : MonoBehaviour
     private void ShowGraph(List<int> valueList)
     {       
             float graphHight = graphContainer.sizeDelta.y;
-            float yMax = 300f;
-            float xSize = 80f;
+            float yMax = maxScore;
+            float xSize = 54f;
 
         GameObject lastCircleGameObject = null; 
         for (int i = 0; i < valueList.Count; i++)

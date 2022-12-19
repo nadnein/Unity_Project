@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Class that handles the Main Menu 
 public class MainMenuScene : MonoBehaviour
 {
     public TMP_Text welcomeText;
@@ -12,11 +13,5 @@ public class MainMenuScene : MonoBehaviour
     void Start()
     {
         welcomeText.text = "Welcome " + ExchangeBetweenScenes.playerName + " !";
-    }
-
-
-    public void StartGame()
-    {
-        SceneManager.LoadScene("FarmAnimals");
     }
 }

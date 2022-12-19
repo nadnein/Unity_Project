@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+// Class that handels the background music
 public class PlayMusic : MonoBehaviour
 {
-
     private GameObject music;
     private AudioSource musicSource;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,7 +21,7 @@ public class PlayMusic : MonoBehaviour
         {
             musicSource.Stop();
         }
-        else if (!musicSource.isPlaying)
+        else if (ExchangeBetweenScenes.musicStatus == "on" && !musicSource.isPlaying)
         {
             musicSource.Play();
         }

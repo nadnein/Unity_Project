@@ -84,7 +84,7 @@ public class DDInput : MonoBehaviour
     }
 
 
-    // Initialise the "correct" target to the input (that meand correct sound/picture to animal at the bottom)
+    // Initialise the "correct" target to the input (that means correct sound/picture to animal at the bottom)
     public void Init(DDTarget target)
     {
         _target = target;

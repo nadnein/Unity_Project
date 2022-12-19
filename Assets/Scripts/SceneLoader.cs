@@ -6,15 +6,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 
+// Class to switch between scenes 
+
 public class SceneLoader : MonoBehaviour
 {
-    // Class to switch between scenes 
-
-    public void LoadNextScene()
-    {
-        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(currentSceneIndex + 1);
-    }
 
     public void LoadFarmAnimalGame()
     {
@@ -34,15 +29,9 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene("SelectGameModeScene");
     }
 
-    public void LoadQuitScene()
-    {
-        SceneManager.LoadScene("QuitScene");
-    }
-
     public void LoadMenuScene()
     {
         SceneManager.LoadSceneAsync("MainMenuScene");
-
     }
 
     public void LoadLoginScene()
@@ -54,10 +43,18 @@ public class SceneLoader : MonoBehaviour
     {
         SceneManager.LoadScene("SettingsScene");
     }
+    public void LoadStatisticsScene()
+    {
+        SceneManager.LoadScene("Statistics");
+    }
+
+    public void LoadScoreboardScene()
+    {
+        SceneManager.LoadScene("Scoreboard");
+    }
 
 
 
-    //TODO: also add a quitgame x in the corner. 
 
 
 }

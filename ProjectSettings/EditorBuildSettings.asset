@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/hihi.unity
     guid: ab3b4eb4cc5f22b4f90c121b5c722255
   - enabled: 1
+    path: Assets/Scenes/Statistics.unity
+    guid: 1666feb0584807d45b7baf4465aadde0
+  - enabled: 1
     path: Assets/Scenes/MainMenuScene.unity
     guid: fdfd167daa662a24eb457eb616ca9e43
   - enabled: 1
@@ -26,6 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LoginScene.unity
     guid: 6b79efb0946c48d45b49c9057932823c
+  - enabled: 1
+    path: Assets/Scenes/Scoreboard.unity
+    guid: f614b7ad2ce494eb49aee3e956967d71
   - enabled: 1
     path: Assets/Scenes/SettingsScene.unity
     guid: b60e133784f05144fb7f27bff7d55dc2

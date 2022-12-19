@@ -12,12 +12,14 @@ public class Players
     public List<Player> players = new List<Player>();
         
 
+    // returs a player by name 
     public Player GetPlayerByName(string name)
     {
         var player = players.Where(player => player.GetName() == name).FirstOrDefault();
         return player;
     }
 
+    // deletes a player by name 
     public void DeletePlayer(string name)
     {
         int myIndex = this.players.FindIndex(player => player.name == name);

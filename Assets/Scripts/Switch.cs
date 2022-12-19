@@ -4,37 +4,47 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
+// Class that handles switch between on and off button of background music 
 public class Switch : MonoBehaviour
 {
-
     public Image On;
     public Image Off;
-    //[SerializeField] AudioSource backgroundMusic;
     private GameObject music;
     private AudioSource musicSource;
-    int index;
 
     void Start()
     {
         music = GameObject.FindWithTag("GameMusic");
         musicSource = music.GetComponent<AudioSource>();
+        if(musicSource.isPlaying)
+        {
+            On.gameObject.SetActive(true);
+            Off.gameObject.SetActive(false);
+        }
+        else
+        {
+            musicSource.Stop();
+            Off.gameObject.SetActive(true);
+            On.gameObject.SetActive(false);
+        }
     }
 
     public void ON()
     {
 
-        index = 1;
         Off.gameObject.SetActive(true);
         On.gameObject.SetActive(false);
         musicSource.Stop();
+        ExchangeBetweenScenes.musicStatus = "off";
 
     }
 
     public void OFF()
     {
-        index = 0;
         On.gameObject.SetActive(true);
         Off.gameObject.SetActive(false);
         musicSource.Play();
+        ExchangeBetweenScenes.musicStatus = "on";
+
     }
 }
