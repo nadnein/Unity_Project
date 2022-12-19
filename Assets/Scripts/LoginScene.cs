@@ -37,12 +37,9 @@ public class LoginScene : MonoBehaviour
         {
             players = new Players();
             DataSaver.saveData(players, "players");
-
         }
 
     }
-
-
 
     public void openKeyboard()
     {

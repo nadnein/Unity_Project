@@ -40,19 +40,15 @@ public class GameManager : MonoBehaviour
     public float reactionTime, countdownTime;
 
     // penalty 
-    private int _score, _penalty, _correctAnimals = 0;
+    public int _score, _penalty, _correctAnimals = 0;
 
-    // the playerobject. 
-    //public Player _player;
-
-    //public FileDataHandler dataHandler;
-
-    private string _mode;
+    public string _mode;
 
     public GameObject retryLevelPopup, nextLevelPopup, gameFinishedPopup;
 
-
     private int _level = 1;
+
+    private Player currentPlayer;
 
 
     void Start()
@@ -60,6 +56,7 @@ public class GameManager : MonoBehaviour
         retryLevelPopup.SetActive(false);
         nextLevelPopup.SetActive(false);
         gameFinishedPopup.SetActive(false);
+
         _mode = "game";
         countdownTime = 20;
         DisplayTime(countdownTime);
@@ -85,8 +82,8 @@ public class GameManager : MonoBehaviour
             if (countdownTime > 0)
             {
                 countdownTime -= Time.deltaTime;  // Subtracts the time from the timer set.  
+                reactionTime += Time.deltaTime;
                 DisplayTime(countdownTime);
-                //reactionTime += (Time.deltaTime * 1000); // Adds the time between startime and now. 
                 CheckMatchOrMismatch();
             }
             else
@@ -115,25 +112,10 @@ public class GameManager : MonoBehaviour
                 Debug.Log("Countdown is over.");
             }
         }
-        // Checks if the timer is still going.
-        if (countdownTime > 0)
-        {
-            countdownTime -= Time.deltaTime;  // Subtracts the time from the timer set.  
-            DisplayTime(countdownTime);
-            //reactionTime += (Time.deltaTime * 1000); // Adds the time between startime and now. 
-            CheckMatchOrMismatch();
-        }
-        else
-        {
-            // QuitGame();
-            Debug.Log("Countdown is over.");
-        }
-
     }
 
     void CheckMatchOrMismatch()
     {
-        CalculateScore();
         if (_inputs != null)
         {
             for (int i = 0; i < _inputs.Count; i++)
@@ -159,19 +141,8 @@ public class GameManager : MonoBehaviour
                     Destroy(solution.gameObject, 1f);
                     Destroy(background.gameObject, 1f);
 
+                    CalculateScore();
                     Spawn();
-
-                    // Switches scene if 5 animals were shown
-                    /*if (_counter == 5)
-                    {
-                        // Using "Invoke" the function is executed after 1 second
-                        _loader.Invoke("LoadNextScene", 1f);
-                    }
-                    // Otherwise spawn animals again 
-                    else
-                    {
-                        Spawn();
-                    }*/
 
                 }
                 else if (_inputs[i].IsMismatch(_target))
@@ -180,6 +151,7 @@ public class GameManager : MonoBehaviour
 
                     // add penalty if user tries to drag and drop wrong animal 
                     _penalty += 1;
+                    CalculateScore();
                     Debug.Log("Current Penalty is:" + _penalty);
 
                 }
@@ -187,15 +159,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void StartNextLevel()
-    {
-        nextLevelPopup.SetActive(false);
-        _target.StartAudio();
-        countdownTime = 10 / 2;
-        _correctAnimals = 0;
-        _level++;
-        _score = 0;
-    }
+    /*
+        public void StartNextLevel()
+        {
+            nextLevelPopup.SetActive(false);
+            _target.StartAudio();
+            countdownTime = 10 / 2;
+            _correctAnimals = 0;
+            _level++;
+            _score = 0;
+        }
+
+    */
 
 
     // Spawns animals on the screen 
@@ -209,18 +184,11 @@ public class GameManager : MonoBehaviour
 
         // get random order of list indices 
         var randomSet = _indices.OrderBy(s => Random.value).Take(4).ToList();
-        foreach (var num in randomSet)
-        {
-            Debug.Log(num);
 
-        }
         var random = new System.Random();
         int _randomNumPicture = randomSet[random.Next(randomSet.Count)];
-        Debug.Log(_randomNumPicture);
+
         int _randomNumSound = randomSet[random.Next(randomSet.Count)];
-        Debug.Log(_randomNumSound);
-
-
 
 
         // get a random index for choosing the animal picture 
@@ -253,6 +221,7 @@ public class GameManager : MonoBehaviour
     private void RetryOrQuit()
     {
         // write to file 
+
         _target.StopAudio();
         retryLevelPopup.SetActive(true);
     }
@@ -262,14 +231,23 @@ public class GameManager : MonoBehaviour
     {
         float minutes = Mathf.FloorToInt(countdownTime / 60);
         float seconds = Mathf.FloorToInt(countdownTime % 60);
-        countdownText.text = $"TIME: {string.Format("{0:00}:{1:00}", minutes, seconds)}";
+
+        if (minutes < 0 || seconds < 0)
+        {
+            countdownText.text = "TIME:--:--";
+        }
+        else
+        {
+            countdownText.text = $"TIME: {string.Format("{0:00}:{1:00}", minutes, seconds)}";
+        }
     }
 
     private void CalculateScore()
     {
-        int score = Mathf.FloorToInt(Mathf.Round((reactionTime)));
-        _score = score;
-        scoreText.text = $"SCORE: {_correctAnimals.ToString()}";
+        var reactionTimeToInt = Mathf.FloorToInt(reactionTime);
+        _score += (_correctAnimals / reactionTimeToInt) * 1000 - _penalty;
+        Debug.Log(_score);
+        scoreText.text = $"SCORE: {_score}";
     }
 
 

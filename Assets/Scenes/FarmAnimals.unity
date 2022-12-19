@@ -2207,7 +2207,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 18.165863, y: -922.655, z: -308.3944, w: 848.38354}
+  m_margin: {x: 18.165863, y: -922.655, z: -738.4127, w: 848.38354}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -2391,6 +2391,10 @@ MonoBehaviour:
   countdownText: {fileID: 143290991}
   reactionTime: 0
   countdownTime: 30
+  _score: 0
+  _penalty: 0
+  _correctAnimals: 0
+  _mode: 
   retryLevelPopup: {fileID: 8369298592745475852}
   nextLevelPopup: {fileID: 1665374422}
   gameFinishedPopup: {fileID: 1194071319}

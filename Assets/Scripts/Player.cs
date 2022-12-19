@@ -12,7 +12,7 @@ public class Player
     //[SerializeField] private string _name;
     public string name;
     [SerializeField] private List<int> _scores;
-    public float highScore = 0;
+    public int highScore = 0;
 
     public Player(string name)
     {
@@ -58,24 +58,5 @@ public class Player
         return name;
     }
 
-    public void addReactionTime(float time)
-    {
-
-
-    }
-
-    public void addScore(int score)
-    {
-        _scores.Add(score);
-    }
-
-    /*
-
-    public int getHighestScore()
-    {
-        return null;
-
-    }
-    */
 
 }
