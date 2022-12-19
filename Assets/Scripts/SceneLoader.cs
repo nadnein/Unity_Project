@@ -50,6 +50,11 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene("LoginScene");
     }
 
+    public void LoadSettingsScene()
+    {
+        SceneManager.LoadScene("SettingsScene");
+    }
+
 
 
     //TODO: also add a quitgame x in the corner. 

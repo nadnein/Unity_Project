@@ -9,19 +9,15 @@ public class Switch : MonoBehaviour
 
     public Image On;
     public Image Off;
-    [SerializeField] AudioSource backgroundMusic;
+    //[SerializeField] AudioSource backgroundMusic;
+    private GameObject music;
+    private AudioSource musicSource;
     int index;
-
 
     void Start()
     {
-
-                
-    }
-
-    void Update()
-    {
-    
+        music = GameObject.FindWithTag("GameMusic");
+        musicSource = music.GetComponent<AudioSource>();
     }
 
     public void ON()
@@ -30,7 +26,7 @@ public class Switch : MonoBehaviour
         index = 1;
         Off.gameObject.SetActive(true);
         On.gameObject.SetActive(false);
-        backgroundMusic.Stop();
+        musicSource.Stop();
 
     }
 
@@ -39,6 +35,6 @@ public class Switch : MonoBehaviour
         index = 0;
         On.gameObject.SetActive(true);
         Off.gameObject.SetActive(false);
-        backgroundMusic.Play();
+        musicSource.Play();
     }
 }

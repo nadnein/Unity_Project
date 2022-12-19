@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
 
     private string _mode;
 
-    public GameObject retryLevelPopup, nextLevelPopup, gameFinishedPopup;
+    public GameObject retryLevelPopup, nextLevelPopup, gameFinishedPopup, taskPopup;
 
 
     private int _level = 1; 
@@ -57,6 +57,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        taskPopup.SetActive(false);
         retryLevelPopup.SetActive(false);
         nextLevelPopup.SetActive(false);
         gameFinishedPopup.SetActive(false); 
