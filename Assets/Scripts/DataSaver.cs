@@ -23,7 +23,6 @@ public class DataSaver
         {
             Directory.CreateDirectory(Path.GetDirectoryName(tempPath));
         }
-        //Debug.Log(path);
 
         try
         {

@@ -14,7 +14,7 @@ public class Players
 
     public Player GetPlayerByName(string name)
     {
-        var player = players.Where(player => player.GetName() == name).FirstOrDefault();
+        var player = players.Where(player => player.name == name).FirstOrDefault();
         return player;
     }
 
@@ -22,7 +22,7 @@ public class Players
     {
         int myIndex = this.players.FindIndex(player => player.name == name);
         int cnt = players.Count;
-        
+
         Debug.Log("players ist so lang: " + cnt.ToString());
         foreach (var player in players)
         {
@@ -33,10 +33,4 @@ public class Players
         this.players.RemoveAt(myIndex);
     }
 
-    public List<int> getPlayersHighScores()
-    {
-        List<int> scores = new List<int>();
-        players.ForEach(player => scores.Add(player.FindBestScore()));
-        return scores;
-    }
 }

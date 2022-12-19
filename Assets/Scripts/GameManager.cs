@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
     public SceneLoader _loader;
 
     // Text in the UI.
-    public TMP_Text scoreText, countdownText;
+    public TMP_Text playerText, countdownText;
 
     // Reaction time in milliseconds. CountdownTime in seconds. 
     public float reactionTime, countdownTime;
@@ -57,6 +57,8 @@ public class GameManager : MonoBehaviour
         nextLevelPopup.SetActive(false);
         gameFinishedPopup.SetActive(false);
 
+        currentPlayer = ExchangeBetweenScenes.currentPayer;
+        playerText.text = $"NAME: {currentPlayer.name}";
         _mode = "game";
         countdownTime = 20;
         DisplayTime(countdownTime);
@@ -102,7 +104,7 @@ public class GameManager : MonoBehaviour
                     else
                     {
                         var text = nextLevelPopup.transform.GetChild(1).GetComponent<TMP_Text>();
-                        text.text = $"You made it to level {_level + 1}, good job!";
+                        text.text = $"You made it to level {_level + 1}, good job! \n Your score was {CalculateScore()}";
                         nextLevelPopup.SetActive(true);
                     }
 
@@ -141,7 +143,6 @@ public class GameManager : MonoBehaviour
                     Destroy(solution.gameObject, 1f);
                     Destroy(background.gameObject, 1f);
 
-                    CalculateScore();
                     Spawn();
 
                 }
@@ -151,7 +152,6 @@ public class GameManager : MonoBehaviour
 
                     // add penalty if user tries to drag and drop wrong animal 
                     _penalty += 1;
-                    CalculateScore();
                     Debug.Log("Current Penalty is:" + _penalty);
 
                 }
@@ -242,14 +242,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void CalculateScore()
+    private int CalculateScore()
     {
-        var reactionTimeToInt = Mathf.FloorToInt(reactionTime);
-        _score += (_correctAnimals / reactionTimeToInt) * 1000 - _penalty;
+        _score = (_correctAnimals / 240) * 1000 - _penalty;
         Debug.Log(_score);
-        scoreText.text = $"SCORE: {_score}";
+        currentPlayer._scores.Add(_score);
+        //currentPlayer._scores.Add(_score, Time.time);
+        return _score;
     }
-
-
-
 }

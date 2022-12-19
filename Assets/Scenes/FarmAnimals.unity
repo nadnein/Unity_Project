@@ -2098,7 +2098,7 @@ GameObject:
   - component: {fileID: 1227355825}
   - component: {fileID: 1227355824}
   m_Layer: 5
-  m_Name: scoreText
+  m_Name: CurrentPlayerText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2144,7 +2144,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'SCORE: 0'
+  m_text: 'PLAYER: '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a631049b28486d54c9cbc94598c5f3b9, type: 2}
   m_sharedMaterial: {fileID: 2147374, guid: a631049b28486d54c9cbc94598c5f3b9, type: 2}
@@ -2387,7 +2387,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 210108fd68ccbed46910c5282e9e7c6b, type: 3}
   - {fileID: 8300000, guid: 7cc86580bfa7f964d8e80b4b62c2a4df, type: 3}
   _loader: {fileID: 1685544669}
-  scoreText: {fileID: 1227355824}
+  playerText: {fileID: 1227355824}
   countdownText: {fileID: 143290991}
   reactionTime: 0
   countdownTime: 30

@@ -116,6 +116,17 @@ public class LoginScene : MonoBehaviour
                 // safe player name to static class that can be accessed from all scenes 
                 ExchangeBetweenScenes.playerName = playerName;
 
+
+                foreach (var player in players.players)
+                {
+                    if (player.name == playerName)
+                    {
+                        Debug.Log($"Current player is: {player.name}");
+                        ExchangeBetweenScenes.currentPayer = player;
+                    }
+                }
+
+
                 // load the next Scene 
                 SceneManager.LoadScene("MainMenuScene");
             });

@@ -7,10 +7,14 @@ public static class ExchangeBetweenScenes
 
     public static string playerName;
 
+    public static Player currentPayer;
+
     public static void PrintPlayerName()
     {
         Debug.Log(playerName);
     }
-     
+
+
+
 }
 
