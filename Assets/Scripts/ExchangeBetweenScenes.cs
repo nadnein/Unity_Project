@@ -9,6 +9,8 @@ public static class ExchangeBetweenScenes
 
     public static Player currentPayer;
 
+    public static Players playersFromFile;
+
     public static void PrintPlayerName()
     {
         Debug.Log(playerName);

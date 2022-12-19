@@ -26,6 +26,7 @@ public class LoginScene : MonoBehaviour
         try // open file with players if it exists
         {
             players = DataSaver.loadData<Players>("players");
+            ExchangeBetweenScenes.playersFromFile = players;
 
             // load button for each player in file 
             foreach (var player in players.players)

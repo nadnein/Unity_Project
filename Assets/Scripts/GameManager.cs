@@ -3,8 +3,6 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-
-
 public class GameManager : MonoBehaviour
 {
     // Manager of the game 
@@ -50,6 +48,7 @@ public class GameManager : MonoBehaviour
 
     private Player currentPlayer;
 
+    public Players players;
 
     void Start()
     {
@@ -58,7 +57,7 @@ public class GameManager : MonoBehaviour
         gameFinishedPopup.SetActive(false);
 
         currentPlayer = ExchangeBetweenScenes.currentPayer;
-        playerText.text = $"NAME: {currentPlayer.name}";
+        players = ExchangeBetweenScenes.playersFromFile;
         _mode = "game";
         countdownTime = 20;
         DisplayTime(countdownTime);
@@ -104,14 +103,11 @@ public class GameManager : MonoBehaviour
                     else
                     {
                         var text = nextLevelPopup.transform.GetChild(1).GetComponent<TMP_Text>();
-                        text.text = $"You made it to level {_level + 1}, good job! \n Your score was {CalculateScore()}";
+                        text.text = $"You made it to level {_level + 1}, good job! Score: {CalculateScore()}";
                         nextLevelPopup.SetActive(true);
                     }
-
-
                 }
 
-                Debug.Log("Countdown is over.");
             }
         }
     }
@@ -177,7 +173,7 @@ public class GameManager : MonoBehaviour
     public void Spawn()
     {
         reactionTime = 0; // Sets the timer to zero again for every new view of animals. 
-
+        showCorrectAnimals();
         //_counter += 1; // increase counter 
         _indices = Enumerable.Range(0, _inputPrefabs.Count).ToList(); // List of integers from 0 to *num of animal prefabs*
         _inputs = new List<DDInput>(); // Init list to store input animals in to access them later 
@@ -220,8 +216,7 @@ public class GameManager : MonoBehaviour
 
     private void RetryOrQuit()
     {
-        // write to file 
-
+        DataSaver.saveData(players, "players");
         _target.StopAudio();
         retryLevelPopup.SetActive(true);
     }
@@ -244,10 +239,25 @@ public class GameManager : MonoBehaviour
 
     private int CalculateScore()
     {
-        _score = (_correctAnimals / 240) * 1000 - _penalty;
-        Debug.Log(_score);
-        currentPlayer._scores.Add(_score);
-        //currentPlayer._scores.Add(_score, Time.time);
-        return _score;
+        _score = (Mathf.RoundToInt((_correctAnimals / 90) * 1000)) - _penalty;  // THIS WILL NOT WORK :(
+        foreach (var player in players.players)
+        {
+            if (player.name == currentPlayer.name)
+            {
+                player._scores.Add(_score);
+                Debug.Log($"Score of current player : {currentPlayer._scores}");
+            }
+        }
+         DataSaver.saveData(players, "players");
+        return _score; 
+        // TODO: currentPlayer._scores.Add(_score, Time.time);
     }
+
+
+    private void showCorrectAnimals()
+    {
+        playerText.text = $"CORRECT: {_correctAnimals}";
+    }
+
+
 }
