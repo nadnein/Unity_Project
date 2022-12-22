@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
 
     // Reaction time in milliseconds. CountdownTime in seconds. 
     public float countdown;
-    private float countdownTime = 90;
+    private float countdownTime = 100;
 
 
     // mode of the game, either "training", "game" or "break"
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
     {
         if (_mode == "training")
         {
-            if (_counter < 2)
+            if (_counter < 31)
             {
                 DisplayAnimalNumber();
                 CheckMatchOrMismatch();
@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if (_correctAnimals < 5)
+                if (_correctAnimals < 3)
                 {
                     RetryOrQuit();
                 }

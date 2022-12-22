@@ -21,6 +21,7 @@ public class LoginScene : MonoBehaviour
 
     private void Start()
     {
+        DataSaver.deleteData("players");
         keyboard.SetActive(false);
 
         try // open file with players if it exists

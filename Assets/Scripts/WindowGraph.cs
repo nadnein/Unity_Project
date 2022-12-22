@@ -24,23 +24,27 @@ public class WindowGraph : MonoBehaviour
         var player = players.GetPlayerByName(ExchangeBetweenScenes.playerName);
       
         var scores = player.GetScores();
-        if (scores.Count < 25)
-        {
-            for (int i = 0; i < scores.Count; i++)
-            {
-                valueList.Add(scores[i]);
-            }
-        }
-        else
-        {
-            for (int i = Math.Max(0, scores.Count - 25); i < scores.Count; ++i)
-            {
-                valueList.Add(scores[i]);
-            }
-        }
 
-        maxScore = valueList.Max();
-        ShowGraph(valueList);
+        if (scores.Count > 0)
+        {
+            if (scores.Count < 25)
+            {
+                for (int i = 0; i < scores.Count; i++)
+                {
+                    valueList.Add(scores[i]);
+                }
+            }
+            else
+            {
+                for (int i = Math.Max(0, scores.Count - 25); i < scores.Count; ++i)
+                {
+                    valueList.Add(scores[i]);
+                }
+            }
+
+            maxScore = valueList.Max();
+            ShowGraph(valueList);
+        }
     }
 
     private GameObject CreateCircle(Vector2 anchoredPosition)
